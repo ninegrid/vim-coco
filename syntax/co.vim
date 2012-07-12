@@ -102,11 +102,15 @@ syntax cluster coInterpString contains=@coSimpleString,
 
 syntax region coRegex start=/\%(\%()\|\i\@<!\d\)\s*\|\i\)\@<!\/\*\@!/
 \                     skip=/\[[^]]\{-}\/[^]]\{-}\]/
-\                     end=/\/[gimy$]\{,4}/
-\                     oneline contains=@coSimpleString
-syntax region coHeregex start=/\/\// end=/\/\/[gimy$?]\{,4}/ contains=@coInterpString,coComment,coSpaceError fold
-highlight default link coHeregex coRegex
-highlight default link coRegex String
+\                     end=|/[igmy$]\{,4}|
+\                     oneline contains=coEscape
+syntax region coHeregex
+\ start=|//| end=|//[igmy$?]\{,4}|
+\ contains=coEscape,coInterpolation,coVarInterpolation,coHeregexComment fold
+syntax match coHeregexComment /\s#.*/ contains=@Spell,coTodo contained
+highlight default link coRegex          String
+highlight default link coHeregex        String
+highlight default link coHeregexComment Comment
 
 syntax region coHeredoc start=/"""/ end=/"""/ contains=@coInterpString fold
 syntax region coHeredoc start=/'''/ end=/'''/ contains=@coSimpleString fold
