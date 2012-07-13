@@ -107,7 +107,8 @@ syntax region coRegex start=/\%(\%()\|\i\@<!\d\)\s*\|\i\)\@<!\/\*\@!/
 syntax region coHeregex
 \ start=|//| end=|//[igmy$?]\{,4}|
 \ contains=coEscape,coInterpolation,coVarInterpolation,coHeregexComment fold
-syntax match coHeregexComment /\s#.*/ contains=@Spell,coTodo contained
+syntax match coHeregexComment /\s#[{$A_Za-z_]\@!.*/
+\ contains=@Spell,coTodo contained
 highlight default link coRegex          String
 highlight default link coHeregex        String
 highlight default link coHeregexComment Comment
