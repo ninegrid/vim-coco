@@ -14,7 +14,7 @@ syntax sync minlines=100
 
 setlocal iskeyword=48-57,A-Z,$,a-z,_
 
-syntax match coIdentifier /[$A-Za-z_]\k*/
+syntax match coIdentifier /[$A-Za-z_]\%(\k\|-[A-Za-z]\)*/
 highlight default link coIdentifier Identifier
 
 " These are 'matches' rather than 'keywords' because vim's highlighting priority
@@ -39,7 +39,7 @@ syntax match coBoolean /\<\%(true\|false\|null\|void\)\>/
 highlight default link coBoolean Boolean
 
 " Matches context variables.
-syntax match coContext /\<\%(this\|arguments\|it\|that\|constructor\|prototype\|superclass\)\>/
+syntax match coContext /\<\%(this\|arguments\|it\|that\|constructor\|prototype\|superclass\|e\|_\)\>/
 highlight default link coContext Type
 
 " Keywords reserved by the language
@@ -91,7 +91,7 @@ highlight default link coInterpDelim Delimiter
 syntax match coEscape /\\\d\d\d\|\\x\x\{2\}\|\\u\x\{4\}\|\\./ contained
 highlight default link coEscape SpecialChar
 
-syntax match coVarInterpolation /#[$A-Za-z_]\k*/ contained
+syntax match coVarInterpolation /#[$A-Za-z_]\%(\k\|-[A-Za-z]\)*/ contained
 highlight default link coVarInterpolation Identifier
 
 " What is in a non-interpolated string
