@@ -62,7 +62,7 @@ highlight default link coFloat Float
 syntax match coNumberComment /\d\+\zs\%(e[+-]\?\d\)\@!\k*\>/ contained
 highlight default link coNumberComment Comment
 " Matches hex numbers like 0xfff, 0x000.
-syntax match coNumber /\<0x\x\+/
+syntax match coNumber /\<0x\x[0-9A-Fa-f_]*/
 " Matches N radix numbers like 2r1010.
 syntax match coNumber
 \ /\<\%([2-9]\|[12]\d\|3[0-6]\)r[0-9A-Za-z][0-9A-Za-z_]*/
