@@ -14,40 +14,52 @@ syntax sync minlines=100
 
 setlocal iskeyword=48-57,A-Z,$,a-z,_
 
-syntax match coIdentifier /[$A-Za-z_]\%(\k\|-[A-Za-z]\)*/
+syntax match coIdentifier /[$A-Za-z_]\%(\k\|-\a\)*/
 highlight default link coIdentifier Identifier
 
 " These are 'matches' rather than 'keywords' because vim's highlighting priority
 " for keywords (the highest) causes them to be wrongly highlighted when used as
 " dot-properties.
-syntax match coStatement /\<\%(return\|break\|continue\|throw\)\>/
+syntax match coStatement
+\ /\<\%(return\|break\|continue\|throw\)\%(\k\|-\a\)\@!/
 highlight default link coStatement Statement
 
-syntax match coRepeat /\<\%(for\%( own\| ever\)\?\|while\|until\)\>/
+syntax match coRepeat
+\ /\<\%(for\%( own\| ever\)\?\|while\|until\)\%(\k\|-\a\)\@!/
 highlight default link coRepeat Repeat
 
-syntax match coConditional /\<\%(if\|else\|unless\|switch\|case\|default\)\>/
+syntax match coConditional
+\ /\<\%(if\|else\|unless\|switch\|case\|default\)\%(\k\|-\a\)\@!/
 highlight default link coConditional Conditional
 
-syntax match coException /\<\%(try\|catch\|finally\)\>/
+syntax match coException
+\ /\<\%(try\|catch\|finally\)\%(\k\|-\a\)\@!/
 highlight default link coException Exception
 
-syntax match coKeyword /\<\%(new\|in\%(stanceof\)\?\|typeof\|delete\|and\|o[fr]\|not\|is\|imp\%(ort\%( all\)\?\|lements\)\|extends\|from\|to\|til\|by\|do\|then\|function\|class\|let\|with\|export\|const\|var\|eval\|super\|fallthrough\|debugger\)\>/
+syntax match coKeyword
+\ /\%(n\%(ew\|ot\)\|i\%(s\|n\%(stanceof\)\?\|mp\%(ort\%( all\)\?\|lements\)\)\|t\%(hen\|ypeof\|o\|il\)\|d\%(o\|e\%(lete\|bugger\)\)\|e\%(x\%(tends\|port\)\|val\)\|f\%(unction\|allthrough\|rom\)\|c\%(lass\|onst\)\|o[fr]\|and\|let\|with\|var\|super\|by\)\%(\k\|-\a\)\@!/
 highlight default link coKeyword Keyword
 
-syntax match coBoolean /\<\%(true\|false\|null\|void\)\>/
+syntax match coBoolean /\<\%(true\|false\|null\|void\)\%(\k\|-\a\)\@!/
 highlight default link coBoolean Boolean
 
 " Matches context variables.
-syntax match coContext /\<\%(this\|arguments\|it\|that\|constructor\|prototype\|superclass\|e\|_\)\>/
+syntax match coContext
+\ /\<\%(th\%(is\|at\)\|arguments\|it\|constructor\|prototype\|superclass\|[e_]\)\%(\k\|-\a\)\@!/
 highlight default link coContext Type
 
+" Displays an error for reserved words.
+syntax match coFutureReserved
+\ /\<\%(enum\|interface\|p\%(ackage\|ublic\|r\%(ivate\|otected\)\)\|static\|yield\)\%(\k\|-\a\)\@!/
+highlight default link coFutureReserved Error
+
 " Keywords reserved by the language
-syntax cluster coReserved contains=coStatement,coRepeat,coConditional,
-\                                  coException,coOperator,coKeyword,coBoolean
+syntax cluster coReserved contains=coStatement,coRepeat,coConditional
+\                                 ,coException,coOperator,coKeyword,coBoolean
+\                                 ,coFutureReserved
 
 " Matches ECMAScript 5 built-in globals.
-syntax match coGlobal /\<\%(Array\|Boolean\|Date\|Function\|JSON\|Math\|Number\|Object\|RegExp\|String\|\%(Syntax\|Type\|URI\)\?Error\|is\%(NaN\|Finite\)\|parse\%(Int\|Float\)\|\%(en\|de\)codeURI\%(Component\)\?\)\>/
+syntax match coGlobal /\<\%(Array\|Boolean\|Date\|Function\|JSON\|Math\|Number\|Object\|RegExp\|String\|\%(Syntax\|Type\|URI\)\?Error\|is\%(NaN\|Finite\)\|parse\%(Int\|Float\)\|\%(en\|de\)codeURI\%(Component\)\?\)\%(\k\|-\a\)\@!/
 highlight default link coGlobal Structure
 
 syntax region coString start=/"/ skip=/\\\\\|\\"/ end=/"/ contains=@coInterpString
@@ -59,7 +71,7 @@ syntax match coFloat
 \ /\<\d[0-9_]*\%(\.\d[0-9_]*\)\?\%(e[+-]\?\d[0-9_]*\)\?\k*/
 \ contains=coNumberComment
 highlight default link coFloat Float
-syntax match coNumberComment /\d\+\zs\%(e[+-]\?\d\)\@!\k*\>/ contained
+syntax match coNumberComment /\d\+\zs\%(e[+-]\?\d\)\@!\k*/ contained
 highlight default link coNumberComment Comment
 " Matches hex numbers like 0xfff, 0x000.
 syntax match coNumber /\<0x\x[0-9A-Fa-f_]*/
@@ -67,10 +79,6 @@ syntax match coNumber /\<0x\x[0-9A-Fa-f_]*/
 syntax match coNumber
 \ /\<\%([2-9]\|[12]\d\|3[0-6]\)r[0-9A-Za-z][0-9A-Za-z_]*/
 highlight default link coNumber Number
-
-" Displays an error for reserved words.
-syntax match coReservedError /\<\%(enum\|interface\|package\|private\|protected\|public\|static\|yield\)\>/
-highlight default link coReservedError Error
 
 syntax keyword coTodo TODO FIXME XXX contained
 highlight default link coTodo Todo
@@ -91,7 +99,7 @@ highlight default link coInterpDelim Delimiter
 syntax match coEscape /\\\d\d\d\|\\x\x\{2\}\|\\u\x\{4\}\|\\./ contained
 highlight default link coEscape SpecialChar
 
-syntax match coVarInterpolation /#[$A-Za-z_]\%(\k\|-[A-Za-z]\)*/ contained
+syntax match coVarInterpolation /#[$A-Za-z_]\%(\k\|-a\)*/ contained
 highlight default link coVarInterpolation Identifier
 
 " What is in a non-interpolated string
@@ -124,13 +132,13 @@ syntax region coWords start=/<\[/ end=/\]>/ contains=fold
 highlight default link coWords String
 
 " Reserved words can be used as property names.
-syntax match coProp /[$A-Za-z_]\k*[ \t]*:[:=]\@!/
+syntax match coProp /[$A-Za-z_]\%(\k\|-\a\)*[ \t]*:[:=]\@!/
 highlight default link coProp Label
 
 syntax match coKey
-\ /\%(\.\@<!\.\%(=\?\s*\|\.\)\|[]})@?]\|::\)\zs\k\+/
+\ /\%(\.\@<!\.\%(=\?\s*\|\.\)\|[]})@?]\|::\)\zs\k\%(\k\|-\a\)*/
 \ transparent
-\ contains=ALLBUT,coIdentifier,coContext,coGlobal,coReservedError,@coReserved 
+\ contains=ALLBUT,coIdentifier,coContext,coGlobal,@coReserved
 
 " Displays an error for trailing whitespace.
 syntax match coSpaceError /\s\+$/ display
