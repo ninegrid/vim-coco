@@ -154,24 +154,6 @@ Use `unwatch` to stop watching a buffer:
 
     :CocoCompile unwatch
 
-### Configure Syntax Highlighting
-
-Add these lines to your `vimrc` to disable the relevant syntax group.
-
-#### Disable trailing whitespace error
-
-Trailing whitespace is highlighted as an error by default. This can be disabled
-with:
-
-    hi link coSpaceError NONE
-
-#### Disable reserved words error
-
-Reserved words like `function` and `var` are highlighted as an error where
-they're not allowed in Coco. This can be disabled with:
-
-    hi link coReservedError NONE
-
 ### Tune Vim for Coco
 
 Changing these core settings can make vim more Coco friendly.

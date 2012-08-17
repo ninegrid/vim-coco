@@ -48,7 +48,7 @@ syntax match coContext
 \ /\<\%(th\%(is\|at\)\|arguments\|it\|constructor\|prototype\|superclass\|[e_]\)\%(\k\|-\a\)\@!/
 highlight default link coContext Type
 
-" Displays an error for reserved words.
+" Displays an error for future reserved words.
 syntax match coFutureReserved
 \ /\<\%(enum\|interface\|p\%(ackage\|ublic\|r\%(ivate\|otected\)\)\|static\|yield\)\%(\k\|-\a\)\@!/
 highlight default link coFutureReserved Error
@@ -139,10 +139,6 @@ syntax match coKey
 \ /\%(\.\@<!\.\%(=\?\s*\|\.\)\|[]})@?]\|::\)\zs\k\%(\k\|-\a\)*/
 \ transparent
 \ contains=ALLBUT,coIdentifier,coContext,coGlobal,@coReserved
-
-" Displays an error for trailing whitespace.
-syntax match coSpaceError /\s\+$/ display
-highlight default link coSpaceError Error
 
 if !exists('b:current_syntax')
   let b:current_syntax = 'coco'
