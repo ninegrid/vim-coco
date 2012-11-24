@@ -45,7 +45,7 @@ highlight default link coBoolean Boolean
 
 " Matches context variables.
 syntax match coContext
-\ /\<\%(th\%(is\|at\)\|arguments\|it\|constructor\|prototype\|superclass\|[e_]\)\%(\k\|-\a\)\@!/
+\ /\<\%(th\%(is\|at\)\|arguments\|it\|constructor\|prototype\|superclass\|e\)\%(\k\|-\a\)\@!/
 highlight default link coContext Type
 
 " Displays an error for future reserved words.
@@ -99,7 +99,7 @@ highlight default link coInterpDelim Delimiter
 syntax match coEscape /\\\d\d\d\|\\x\x\{2\}\|\\u\x\{4\}\|\\./ contained
 highlight default link coEscape SpecialChar
 
-syntax match coVarInterpolation /#[$A-Za-z_]\%(\k\|-a\)*/ contained
+syntax match coVarInterpolation /#\%([$A-Za-z_]\%(\k\|-a\)*\|[@&]\)/ contained
 highlight default link coVarInterpolation Identifier
 
 " What is in a non-interpolated string
