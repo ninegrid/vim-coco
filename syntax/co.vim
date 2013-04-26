@@ -87,7 +87,7 @@ syntax match  coComment /#.*/                   contains=@Spell,coTodo
 syntax region coComment start=/\/\*/ end=/\*\// contains=@Spell,coTodo
 highlight default link coComment Comment
 
-syntax region coEmbed start=/`/ skip=/\\\\\|\\`/ end=/`/
+syntax match coEmbed /\(`\+\)\_.\{-}\1/
 highlight default link coEmbed Special
 
 syntax region coInterpolation matchgroup=coInterpDelim
@@ -99,7 +99,8 @@ highlight default link coInterpDelim Delimiter
 syntax match coEscape /\\\d\d\d\|\\x\x\{2\}\|\\u\x\{4\}\|\\./ contained
 highlight default link coEscape SpecialChar
 
-syntax match coVarInterpolation /#\%([$A-Za-z_]\%(\k\|-a\)*\|[@&]\)/ contained
+syntax match coVarInterpolation
+\ /#\%([$A-Za-z_]\%(\k\|-a\)*\|[@&]\|<>\)/ contained
 highlight default link coVarInterpolation Identifier
 
 " What is in a non-interpolated string
@@ -114,6 +115,9 @@ syntax region coRegex start=/\%(\%()\|\i\@<!\d\)\s*\|\i\)\@<!\/\*\@!/
 \                     oneline contains=coEscape
 syntax region coHeregex
 \ start=|//| end=|//[igmy$?]\{,4}|
+\ contains=coEscape,coInterpolation,coVarInterpolation,coHeregexComment fold
+syntax region coHeregex
+\ start=|///| end=|///[igmy$?]\{,4}|
 \ contains=coEscape,coInterpolation,coVarInterpolation,coHeregexComment fold
 syntax match coHeregexComment /\s#[{$A_Za-z_]\@!.*/
 \ contains=@Spell,coTodo contained
